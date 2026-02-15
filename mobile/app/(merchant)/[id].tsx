@@ -4,7 +4,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { merchants } from '@shared/mockData';
 import { ScoreBadge } from '../../components/ScoreBadge';
 import { ProductStatus } from '../../components/ProductStatus';
-import { Phone, MapPin, ClipboardList, ArrowLeft, ArrowRight, Store, Plus, FileText } from 'lucide-react-native';
+import { Phone, MapPin, ClipboardList, ArrowLeft, ArrowRight, Store, Plus, FileText, Edit } from 'lucide-react-native';
 import { I18nManager } from 'react-native';
 
 export default function MerchantProfile() {
@@ -39,7 +39,16 @@ export default function MerchantProfile() {
                         <TouchableOpacity onPress={() => router.back()} className="p-2 -mr-2">
                             {I18nManager.isRTL ? <ArrowRight size={24} color="#374151" /> : <ArrowLeft size={24} color="#374151" />}
                         </TouchableOpacity>
-                        <ScoreBadge score={merchant.amanScore} size="lg" />
+                        <View className="flex-row gap-2">
+                            <TouchableOpacity
+                                onPress={() => router.push({ pathname: '/(merchant)/edit-request', params: { merchantId: merchant.id } })}
+                                className="bg-gray-100 p-2 rounded-full flex-row items-center"
+                            >
+                                <Edit size={16} color="#4B5563" />
+                                <Text className="text-gray-700 text-xs font-bold ml-1">تعديل</Text>
+                            </TouchableOpacity>
+                            <ScoreBadge score={merchant.amanScore} size="lg" />
+                        </View>
                     </View>
 
                     <View className="items-center mb-4">

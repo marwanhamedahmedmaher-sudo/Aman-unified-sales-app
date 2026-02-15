@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { Users, LayoutDashboard, Settings, LogOut, Shield } from 'lucide-react';
+import { Users, LayoutDashboard, Settings, LogOut, Shield, FilePenLine } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function DashboardLayout() {
@@ -45,6 +45,16 @@ export default function DashboardLayout() {
                     >
                         <LayoutDashboard className="h-5 w-5" />
                         <span>توزيع الفرص (Leads)</span>
+                    </NavLink>
+
+                    <NavLink
+                        to="/dashboard/requests"
+                        className={({ isActive }) =>
+                            `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive ? 'bg-blue-50 text-blue-700 font-bold' : 'text-gray-600 hover:bg-gray-50'}`
+                        }
+                    >
+                        <FilePenLine className="h-5 w-5" />
+                        <span>طلبات التعديل</span>
                     </NavLink>
 
                     <div className="pt-4 mt-4 border-t border-gray-100">

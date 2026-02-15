@@ -68,3 +68,25 @@ export interface LeadDistribution {
   territoryAvg: number;
   isImbalanced: boolean;
 }
+
+export type EditRequestStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'ESCALATED';
+export type EditableField = 'MOBILE' | 'BUSINESS_NAME' | 'ADDRESS' | 'TERRITORY' | 'LOCATION';
+
+export interface EditRequest {
+  id: string;
+  merchantId: string;
+  merchantName: string;
+  field: EditableField;
+  oldValue: string;
+  newValue: string;
+  requestedBy: {
+    id: string;
+    name: string;
+    role: UserRole;
+  };
+  requestedAt: string; // ISO String
+  reason: string;
+  status: EditRequestStatus;
+  rejectionReason?: string;
+  territory: string;
+}

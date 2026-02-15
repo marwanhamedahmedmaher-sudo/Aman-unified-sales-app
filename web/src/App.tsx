@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import DashboardLayout from './layouts/DashboardLayout';
 import UsersPage from './pages/Users';
 import LeadDistribution from './pages/LeadDistribution';
+import EditRequestsPage from './pages/EditRequests';
 
 // Placeholder components
 const Settings = () => <div className="p-4">Settings (Coming Soon)</div>;
@@ -17,6 +18,7 @@ function App() {
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<UsersPage />} />
             <Route path="leads" element={<LeadDistribution />} />
+            <Route path="requests" element={<EditRequestsPage />} />
             <Route path="settings" element={<Settings />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

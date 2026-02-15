@@ -66,3 +66,74 @@ export const tasks: Task[] = Array.from({ length: 30 }).map((_, i) => ({
     dueDate: new Date(Date.now() + Math.random() * 1000000000).toISOString(),
     createdAt: new Date(Date.now() - Math.random() * 1000000000).toISOString(),
 }));
+
+// Mock Edit Requests
+import type { EditRequest } from './types';
+
+export const editRequests: EditRequest[] = [
+    {
+        id: 'er1',
+        merchantId: 'm1',
+        merchantName: 'محل أحمد',
+        field: 'MOBILE',
+        oldValue: '01012345678',
+        newValue: '01098765432',
+        requestedBy: { id: 'u4', name: 'Sara Hassan', role: 'CROSS_SELL' },
+        requestedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
+        reason: 'Merchant informed me number changed',
+        status: 'PENDING',
+        territory: 'Cairo - Nasr City'
+    },
+    {
+        id: 'er2',
+        merchantId: 'm2',
+        merchantName: 'صيدلية النور',
+        field: 'BUSINESS_NAME',
+        oldValue: 'صيدليه النور',
+        newValue: 'صيدلية النور الطبية',
+        requestedBy: { id: 'u1', name: 'Ahmed Hassan', role: 'LO' },
+        requestedAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(), // 5 hours ago
+        reason: 'Wrong spelling',
+        status: 'PENDING',
+        territory: 'Cairo - Heliopolis'
+    },
+    {
+        id: 'er3',
+        merchantId: 'm3',
+        merchantName: 'مطعم الفلاح',
+        field: 'ADDRESS',
+        oldValue: 'شارع النيل',
+        newValue: '15 شارع النيل',
+        requestedBy: { id: 'u4', name: 'Fatma Sayed', role: 'CROSS_SELL' },
+        requestedAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
+        reason: 'Added building #',
+        status: 'PENDING',
+        territory: 'Cairo - Nasr City'
+    },
+    {
+        id: 'er4',
+        merchantId: 'm4',
+        merchantName: 'محل سامي',
+        field: 'TERRITORY',
+        oldValue: 'Cairo - Downtown',
+        newValue: 'Cairo - Nasr City',
+        requestedBy: { id: 'u3', name: 'Mohamed Ibrahim', role: 'LO' },
+        requestedAt: new Date(Date.now() - 49 * 60 * 60 * 1000).toISOString(), // 2 days + 1 hour ago (Escalated)
+        reason: 'Moved location',
+        status: 'ESCALATED',
+        territory: 'Cairo - Downtown'
+    },
+    {
+        id: 'er5',
+        merchantId: 'm5',
+        merchantName: 'بقالة علي',
+        field: 'MOBILE',
+        oldValue: '01156789012',
+        newValue: '01098765432',
+        requestedBy: { id: 'u2', name: 'Sara Ali', role: 'LO' },
+        requestedAt: new Date(Date.now() - 73 * 60 * 60 * 1000).toISOString(), // 3 days ago (Escalated)
+        reason: 'Old # disconnected',
+        status: 'ESCALATED',
+        territory: 'Cairo - Heliopolis'
+    }
+];
