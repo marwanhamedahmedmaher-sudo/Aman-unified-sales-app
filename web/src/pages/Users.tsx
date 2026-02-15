@@ -97,22 +97,22 @@ export default function UsersPage() {
                     <p className="text-gray-500">عرض وإدارة الحسابات والصلاحيات</p>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-4 items-center">
                     {/* Only Super Admin see "Import" (Mock) */}
                     {currentUser?.role === 'SUPER_ADMIN' && (
-                        <Button variant="outline">
-                            استيراد مستخدمين (Bulk)
+                        <Button variant="outline" className="gap-2">
+                            <span className="hidden sm:inline">استيراد مستخدمين (Bulk)</span>
+                            <span className="sm:hidden">استيراد</span>
                         </Button>
                     )}
 
-                    {/* TM can only add users if looking at their territory (logic handled in Add User modal essentially, 
-                        but effectively they always look at their territory so they can always add) */}
                     {/* TM can only add users if looking at their territory */}
                     <Dialog open={isDialogOpen} onOpenChange={handleOpenDialog}>
                         <DialogTrigger asChild>
-                            <Button className="bg-blue-700 hover:bg-blue-800">
-                                <UserPlus className="h-4 w-4 ml-2" />
-                                إضافة مستخدم جديد
+                            <Button className="bg-blue-700 hover:bg-blue-800 gap-2">
+                                <UserPlus className="h-4 w-4" />
+                                <span className="hidden sm:inline">إضافة مستخدم جديد</span>
+                                <span className="sm:hidden">إضافة</span>
                             </Button>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[425px]">
