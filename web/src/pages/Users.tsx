@@ -1,15 +1,35 @@
 import { useState } from 'react';
 import { users as initialUsers } from '@shared/mockData';
-import type { User } from '@shared/types';
+import type { User, UserRole } from '@shared/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
 import { Search, UserPlus, Filter, UserX, UserCheck } from 'lucide-react';
 
 export default function UsersPage() {
     const [users, setUsers] = useState<User[]>(initialUsers);
     const [search, setSearch] = useState('');
     const [roleFilter, setRoleFilter] = useState<'ALL' | 'LO' | 'CROSS_SELL'>('ALL');
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+    // Form State
+    const [formData, setFormData] = useState({
+        name: '',
+        mobile: '',
+        hrid: '',
+        role: 'LO' as UserRole,
+        territory: 'Cairo - Nasr City'
+    });
 
     const filteredUsers = users.filter(user => {
         const matchSearch = user.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -23,6 +43,29 @@ export default function UsersPage() {
         setUsers(users.map(u => u.id === userId ? { ...u, status: newStatus } : u));
     };
 
+    const handleAddUser = (e: React.FormEvent) => {
+        e.preventDefault();
+        const newUser: User = {
+            id: `u${Date.now()}`,
+            name: formData.name,
+            mobile: formData.mobile,
+            hrid: formData.hrid,
+            role: formData.role,
+            territory: formData.territory,
+            status: 'ACTIVE'
+        };
+
+        setUsers([newUser, ...users]);
+        setFormData({
+            name: '',
+            mobile: '',
+            hrid: '',
+            role: 'LO',
+            territory: 'Cairo - Nasr City'
+        });
+        setIsDialogOpen(false);
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -30,10 +73,97 @@ export default function UsersPage() {
                     <h1 className="text-2xl font-bold text-gray-900">إدارة المستخدمين</h1>
                     <p className="text-gray-500">عرض وإدارة الحسابات والصلاحيات</p>
                 </div>
-                <Button className="bg-blue-700 hover:bg-blue-800">
-                    <UserPlus className="h-4 w-4 ml-2" />
-                    إضافة مستخدم جديد
-                </Button>
+
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogTrigger asChild>
+                        <Button className="bg-blue-700 hover:bg-blue-800">
+                            <UserPlus className="h-4 w-4 ml-2" />
+                            إضافة مستخدم جديد
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                        <form onSubmit={handleAddUser}>
+                            <DialogHeader>
+                                <DialogTitle>إضافة مستخدم جديد</DialogTitle>
+                                <DialogDescription>
+                                    أدخل بيانات الموظف الجديد لإنشاء حساب له.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="name" className="text-right">
+                                        الاسم
+                                    </Label>
+                                    <Input
+                                        id="name"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        className="col-span-3"
+                                        required
+                                    />
+                                </div>
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="mobile" className="text-right">
+                                        الموبايل
+                                    </Label>
+                                    <Input
+                                        id="mobile"
+                                        value={formData.mobile}
+                                        onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
+                                        className="col-span-3"
+                                        required
+                                    />
+                                </div>
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="hrid" className="text-right">
+                                        HRID
+                                    </Label>
+                                    <Input
+                                        id="hrid"
+                                        value={formData.hrid}
+                                        onChange={(e) => setFormData({ ...formData, hrid: e.target.value })}
+                                        className="col-span-3"
+                                        required
+                                    />
+                                </div>
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="role" className="text-right">
+                                        الدور
+                                    </Label>
+                                    <select
+                                        id="role"
+                                        value={formData.role}
+                                        onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
+                                        className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    >
+                                        <option value="LO">Loan Officer</option>
+                                        <option value="CROSS_SELL">Cross-Sell Rep</option>
+                                        <option value="TERRITORY_MANAGER">Territory Manager</option>
+                                    </select>
+                                </div>
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="territory" className="text-right">
+                                        المنطقة
+                                    </Label>
+                                    <select
+                                        id="territory"
+                                        value={formData.territory}
+                                        onChange={(e) => setFormData({ ...formData, territory: e.target.value })}
+                                        className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    >
+                                        <option value="Cairo - Nasr City">Cairo - Nasr City</option>
+                                        <option value="Cairo - Heliopolis">Cairo - Heliopolis</option>
+                                        <option value="Giza - Dokki">Giza - Dokki</option>
+                                        <option value="Cairo - Downtown">Cairo - Downtown</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <DialogFooter>
+                                <Button type="submit">حفظ المستخدم</Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </Dialog>
             </div>
 
             <Card>
