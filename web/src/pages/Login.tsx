@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 import { ShieldCheck } from 'lucide-react';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,13 +10,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function Login() {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [hrid, setHrid] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = (role: 'ADMIN' | 'MANAGER') => {
+    const handleLogin = (role: 'SUPER_ADMIN' | 'TERRITORY_MANAGER') => {
         // Mock login
         if (hrid && password) {
-            localStorage.setItem('userRole', role);
+            login(role);
             navigate('/dashboard');
         }
     };
@@ -61,12 +63,12 @@ export default function Login() {
                         </div>
 
                         <TabsContent value="admin">
-                            <Button className="w-full mt-4 bg-blue-700 hover:bg-blue-800" onClick={() => handleLogin('ADMIN')}>
+                            <Button className="w-full mt-4 bg-blue-700 hover:bg-blue-800" onClick={() => handleLogin('SUPER_ADMIN')}>
                                 دخول (Admin)
                             </Button>
                         </TabsContent>
                         <TabsContent value="manager">
-                            <Button className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700" onClick={() => handleLogin('MANAGER')}>
+                            <Button className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700" onClick={() => handleLogin('TERRITORY_MANAGER')}>
                                 دخول (Manager)
                             </Button>
                         </TabsContent>

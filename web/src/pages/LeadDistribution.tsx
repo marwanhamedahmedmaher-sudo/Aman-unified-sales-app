@@ -1,11 +1,20 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useAuth } from '@/context/AuthContext';
 import { users, tasks } from '@shared/mockData';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function LeadDistribution() {
-    const [selectedTerritory, setSelectedTerritory] = useState<string>('Cairo - Nasr City');
+    const { user: currentUser } = useAuth();
+    const [selectedTerritory, setSelectedTerritory] = useState<string>(currentUser?.territory === 'All' ? 'Cairo - Nasr City' : currentUser?.territory || 'Cairo - Nasr City');
+
+    // Enforce territory for non-admins
+    useEffect(() => {
+        if (currentUser && currentUser.role !== 'SUPER_ADMIN' && currentUser.territory !== 'All') {
+            setSelectedTerritory(currentUser.territory);
+        }
+    }, [currentUser]);
 
     // get unique territories
     const territories = useMemo(() => {
@@ -39,16 +48,23 @@ export default function LeadDistribution() {
                     <p className="text-gray-500">مراقبة الأحمال وتوزيع العمل على الفريق</p>
                 </div>
                 <div className="flex gap-2">
-                    {territories.map(t => (
-                        <Button
-                            key={t}
-                            variant={selectedTerritory === t ? 'default' : 'outline'}
-                            onClick={() => setSelectedTerritory(t)}
-                            size="sm"
-                        >
-                            {t}
-                        </Button>
-                    ))}
+                    {/* RBAC: Only Super Admin can switch territories */}
+                    {currentUser?.role === 'SUPER_ADMIN' ? (
+                        territories.map(t => (
+                            <Button
+                                key={t}
+                                variant={selectedTerritory === t ? 'default' : 'outline'}
+                                onClick={() => setSelectedTerritory(t)}
+                                size="sm"
+                            >
+                                {t}
+                            </Button>
+                        ))
+                    ) : (
+                        <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-md font-bold text-sm">
+                            منطقة: {selectedTerritory}
+                        </div>
+                    )}
                 </div>
             </div>
 
