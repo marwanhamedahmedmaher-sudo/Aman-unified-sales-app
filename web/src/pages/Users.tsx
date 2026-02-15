@@ -97,117 +97,7 @@ export default function UsersPage() {
                     <p className="text-gray-500">عرض وإدارة الحسابات والصلاحيات</p>
                 </div>
 
-                <div className="flex gap-4 items-center">
-                    {/* Only Super Admin see "Import" (Mock) */}
-                    {currentUser?.role === 'SUPER_ADMIN' && (
-                        <Button variant="outline" className="gap-2">
-                            <span className="hidden sm:inline">استيراد مستخدمين (Bulk)</span>
-                            <span className="sm:hidden">استيراد</span>
-                        </Button>
-                    )}
-
-                    {/* TM can only add users if looking at their territory */}
-                    <Dialog open={isDialogOpen} onOpenChange={handleOpenDialog}>
-                        <DialogTrigger asChild>
-                            <Button className="bg-blue-700 hover:bg-blue-800 gap-2">
-                                <UserPlus className="h-4 w-4" />
-                                <span className="hidden sm:inline">إضافة مستخدم جديد</span>
-                                <span className="sm:hidden">إضافة</span>
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-[425px]">
-                            <form onSubmit={handleAddUser}>
-                                <DialogHeader>
-                                    <DialogTitle>إضافة مستخدم جديد</DialogTitle>
-                                    <DialogDescription>
-                                        أدخل بيانات الموظف الجديد لإنشاء حساب له.
-                                    </DialogDescription>
-                                </DialogHeader>
-                                <div className="grid gap-4 py-4">
-                                    <div className="grid grid-cols-4 items-center gap-4">
-                                        <Label htmlFor="name" className="text-right">
-                                            الاسم
-                                        </Label>
-                                        <Input
-                                            id="name"
-                                            value={formData.name}
-                                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                            className="col-span-3"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="grid grid-cols-4 items-center gap-4">
-                                        <Label htmlFor="mobile" className="text-right">
-                                            الموبايل
-                                        </Label>
-                                        <Input
-                                            id="mobile"
-                                            value={formData.mobile}
-                                            onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-                                            className="col-span-3"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="grid grid-cols-4 items-center gap-4">
-                                        <Label htmlFor="hrid" className="text-right">
-                                            HRID
-                                        </Label>
-                                        <Input
-                                            id="hrid"
-                                            value={formData.hrid}
-                                            onChange={(e) => setFormData({ ...formData, hrid: e.target.value })}
-                                            className="col-span-3"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="grid grid-cols-4 items-center gap-4">
-                                        <Label htmlFor="role" className="text-right">
-                                            الدور
-                                        </Label>
-                                        <select
-                                            id="role"
-                                            value={formData.role}
-                                            onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
-                                            className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                        >
-                                            <option value="LO">Loan Officer</option>
-                                            <option value="CROSS_SELL">Cross-Sell Rep</option>
-                                            <option value="TERRITORY_MANAGER">Territory Manager</option>
-                                        </select>
-                                    </div>
-                                    <div className="grid grid-cols-4 items-center gap-4">
-                                        <Label htmlFor="territory" className="text-right">
-                                            المنطقة
-                                        </Label>
-                                        {currentUser?.role === 'SUPER_ADMIN' ? (
-                                            <select
-                                                id="territory"
-                                                value={formData.territory}
-                                                onChange={(e) => setFormData({ ...formData, territory: e.target.value })}
-                                                className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                            >
-                                                <option value="Cairo - Nasr City">Cairo - Nasr City</option>
-                                                <option value="Cairo - Heliopolis">Cairo - Heliopolis</option>
-                                                <option value="Giza - Dokki">Giza - Dokki</option>
-                                                <option value="Cairo - Downtown">Cairo - Downtown</option>
-                                            </select>
-                                        ) : (
-                                            <Input
-                                                id="territory"
-                                                value={formData.territory}
-                                                disabled
-                                                className="col-span-3 bg-gray-100 text-gray-500"
-                                            />
-                                        )}
-                                    </div>
-                                </div>
-                                <DialogFooter>
-                                    <Button type="submit">حفظ المستخدم</Button>
-                                </DialogFooter>
-                            </form>
-                        </DialogContent>
-                    </Dialog>
-                </div>
+                {/* Actions relocated to table header */}
 
                 <Card>
                     <CardHeader className="pb-3">
@@ -249,6 +139,228 @@ export default function UsersPage() {
                             <Button variant="ghost" size="icon">
                                 <Filter className="h-4 w-4" />
                             </Button>
+
+                            <div className="flex items-center gap-2 mr-2 border-r pr-2">
+                                {/* Only Super Admin see "Import" (Mock) */}
+                                {currentUser?.role === 'SUPER_ADMIN' && (
+                                    <Button variant="outline" size="sm" className="h-8 gap-2">
+                                        <span className="hidden lg:inline">استيراد (Bulk)</span>
+                                        <span className="lg:hidden">استيراد</span>
+                                    </Button>
+                                )}
+
+                                {/* TM can only add users if looking at their territory */}
+                                <Dialog open={isDialogOpen} onOpenChange={handleOpenDialog}>
+                                    <DialogTrigger asChild>
+                                        <Button size="sm" className="bg-blue-700 hover:bg-blue-800 h-8 gap-2">
+                                            <UserPlus className="h-3.5 w-3.5" />
+                                            <span className="hidden lg:inline">إضافة مستخدم</span>
+                                        </Button>
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-[425px]">
+                                        <form onSubmit={handleAddUser}>
+                                            <DialogHeader>
+                                                <DialogTitle>إضافة مستخدم جديد</DialogTitle>
+                                                <DialogDescription>
+                                                    أدخل بيانات الموظف الجديد لإنشاء حساب له.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <div className="grid gap-4 py-4">
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="name" className="text-right">
+                                                        الاسم
+                                                    </Label>
+                                                    <Input
+                                                        id="name"
+                                                        value={formData.name}
+                                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                                        className="col-span-3"
+                                                        required
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="mobile" className="text-right">
+                                                        الموبايل
+                                                    </Label>
+                                                    <Input
+                                                        id="mobile"
+                                                        value={formData.mobile}
+                                                        onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
+                                                        className="col-span-3"
+                                                        required
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="hrid" className="text-right">
+                                                        HRID
+                                                    </Label>
+                                                    <Input
+                                                        id="hrid"
+                                                        value={formData.hrid}
+                                                        onChange={(e) => setFormData({ ...formData, hrid: e.target.value })}
+                                                        className="col-span-3"
+                                                        required
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="role" className="text-right">
+                                                        الدور
+                                                    </Label>
+                                                    <select
+                                                        id="role"
+                                                        value={formData.role}
+                                                        onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
+                                                        className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                    >
+                                                        <option value="LO">Loan Officer</option>
+                                                        <option value="CROSS_SELL">Cross-Sell Rep</option>
+                                                        <option value="TERRITORY_MANAGER">Territory Manager</option>
+                                                    </select>
+                                                </div>
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="territory" className="text-right">
+                                                        المنطقة
+                                                    </Label>
+                                                    {currentUser?.role === 'SUPER_ADMIN' ? (
+                                                        <select
+                                                            id="territory"
+                                                            value={formData.territory}
+                                                            onChange={(e) => setFormData({ ...formData, territory: e.target.value })}
+                                                            className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                        >
+                                                            <option value="Cairo - Nasr City">Cairo - Nasr City</option>
+                                                            <option value="Cairo - Heliopolis">Cairo - Heliopolis</option>
+                                                            <option value="Giza - Dokki">Giza - Dokki</option>
+                                                            <option value="Cairo - Downtown">Cairo - Downtown</option>
+                                                        </select>
+                                                    ) : (
+                                                        <Input
+                                                            id="territory"
+                                                            value={formData.territory}
+                                                            disabled
+                                                            className="col-span-3 bg-gray-100 text-gray-500"
+                                                        />
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <DialogFooter>
+                                                <Button type="submit">حفظ المستخدم</Button>
+                                            </DialogFooter>
+                                        </form>
+                                    </DialogContent>
+                                </Dialog>
+                            </div>
+
+                            <div className="flex items-center gap-2 mr-2 border-r pr-2">
+                                {/* Only Super Admin see "Import" (Mock) */}
+                                {currentUser?.role === 'SUPER_ADMIN' && (
+                                    <Button variant="outline" size="sm" className="h-8 gap-2">
+                                        <span className="hidden lg:inline">استيراد (Bulk)</span>
+                                        <span className="lg:hidden">استيراد</span>
+                                    </Button>
+                                )}
+
+                                {/* TM can only add users if looking at their territory */}
+                                <Dialog open={isDialogOpen} onOpenChange={handleOpenDialog}>
+                                    <DialogTrigger asChild>
+                                        <Button size="sm" className="bg-blue-700 hover:bg-blue-800 h-8 gap-2">
+                                            <UserPlus className="h-3.5 w-3.5" />
+                                            <span className="hidden lg:inline">إضافة مستخدم</span>
+                                        </Button>
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-[425px]">
+                                        <form onSubmit={handleAddUser}>
+                                            <DialogHeader>
+                                                <DialogTitle>إضافة مستخدم جديد</DialogTitle>
+                                                <DialogDescription>
+                                                    أدخل بيانات الموظف الجديد لإنشاء حساب له.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <div className="grid gap-4 py-4">
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="name" className="text-right">
+                                                        الاسم
+                                                    </Label>
+                                                    <Input
+                                                        id="name"
+                                                        value={formData.name}
+                                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                                        className="col-span-3"
+                                                        required
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="mobile" className="text-right">
+                                                        الموبايل
+                                                    </Label>
+                                                    <Input
+                                                        id="mobile"
+                                                        value={formData.mobile}
+                                                        onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
+                                                        className="col-span-3"
+                                                        required
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="hrid" className="text-right">
+                                                        HRID
+                                                    </Label>
+                                                    <Input
+                                                        id="hrid"
+                                                        value={formData.hrid}
+                                                        onChange={(e) => setFormData({ ...formData, hrid: e.target.value })}
+                                                        className="col-span-3"
+                                                        required
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="role" className="text-right">
+                                                        الدور
+                                                    </Label>
+                                                    <select
+                                                        id="role"
+                                                        value={formData.role}
+                                                        onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
+                                                        className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                    >
+                                                        <option value="LO">Loan Officer</option>
+                                                        <option value="CROSS_SELL">Cross-Sell Rep</option>
+                                                        <option value="TERRITORY_MANAGER">Territory Manager</option>
+                                                    </select>
+                                                </div>
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <Label htmlFor="territory" className="text-right">
+                                                        المنطقة
+                                                    </Label>
+                                                    {currentUser?.role === 'SUPER_ADMIN' ? (
+                                                        <select
+                                                            id="territory"
+                                                            value={formData.territory}
+                                                            onChange={(e) => setFormData({ ...formData, territory: e.target.value })}
+                                                            className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                        >
+                                                            <option value="Cairo - Nasr City">Cairo - Nasr City</option>
+                                                            <option value="Cairo - Heliopolis">Cairo - Heliopolis</option>
+                                                            <option value="Giza - Dokki">Giza - Dokki</option>
+                                                            <option value="Cairo - Downtown">Cairo - Downtown</option>
+                                                        </select>
+                                                    ) : (
+                                                        <Input
+                                                            id="territory"
+                                                            value={formData.territory}
+                                                            disabled
+                                                            className="col-span-3 bg-gray-100 text-gray-500"
+                                                        />
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <DialogFooter>
+                                                <Button type="submit">حفظ المستخدم</Button>
+                                            </DialogFooter>
+                                        </form>
+                                    </DialogContent>
+                                </Dialog>
+                            </div>
                         </div>
                     </CardHeader>
                     <CardContent>
